@@ -1,0 +1,6 @@
+package: .
+import:
+- package: github.com/buaazp/fasthttprouter
+  version: v0.1.1
+- package: github.com/valyala/fasthttp
+  version: v20160617
