@@ -1,29 +1,36 @@
+
 package main
 
 import (
-	"fmt"
-	"log"
-
-	"github.com/buaazp/fasthttprouter"
-	"github.com/valyala/fasthttp"
+        "fmt"
+        "net/http"
+		// jsoniter
+		// fasthttp
+        "google.golang.org/appengine"
 )
 
 func main() {
-	router := fasthttprouter.New()
-	router.GET("/", Index)
-	router.GET("/test/testvar", Subpage)
+        // Serve static files from "static" directory.
+        http.Handle("/", http.FileServer(http.Dir("public")))
+        //http.Handle("/public/", http.FileServer(http.Dir(".")))
 
-	log.Fatal(fasthttp.ListenAndServe(":8080", router.Handler))
+        http.HandleFunc("/json", jsonHandler)
+        appengine.Main()
 }
 
-// show index page
-func Index(ctx *fasthttp.RequestCtx) {
-	fmt.Fprint(ctx, "Welcome!\n")
 
-}
+// turn this into json
+const jsonRes = `<!doctype html>
+<html>
+<head>
+  <title>Static Files</title>
+  <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+  <p>This could be json.</p>
+</body>
+</html>`
 
-// show test params
-func Subpage(ctx *fasthttp.RequestCtx) {
-	fmt.Fprintf(ctx, "testing params, %s \n", ctx.UserValue("name"))
-
+func jsonHandler(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprint(w, jsonRes)
 }

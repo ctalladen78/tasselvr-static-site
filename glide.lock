@@ -1,8 +1,0 @@
-hash: bb0f8de9ddf0e5ed3bf62fbfdbe3896d4e35e5885fefde32c5a1a75e0f2bfa5a
-updated: 2018-04-18T20:32:50.304090325-07:00
-imports:
-- name: github.com/buaazp/fasthttprouter
-  version: ade4e2031af3aed7fffd241084aad80a58faf421
-- name: github.com/valyala/fasthttp
-  version: d42167fd04f636e20b005e9934159e95454233c7
-testImports: []
