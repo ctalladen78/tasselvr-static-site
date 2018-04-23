@@ -1,11 +1,17 @@
 
 (function(Vue){
-            console.log("hello VUE 1 from main app.js")
     new Vue({
-        el: 'body',
+        el: 'app',
+        // mounted: function(){}
         created: function(){
             console.log("hello VUE 2")
+        },
+        data: {
+            msg: "initial message"
         }
 
+
     })
+    var i = vm.$isServer()
+    console.log(i)
 })(Vue)
