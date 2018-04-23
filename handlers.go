@@ -1,5 +1,7 @@
 package main
 
+// handler functions
+
 import (
 	"fmt"
 	"net/http"
