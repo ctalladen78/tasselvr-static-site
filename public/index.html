@@ -1,78 +1,98 @@
-            <!doctype html>
-            <html lang="en">
-              <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>TasselVR a travel marketplace</title>
-              </head>
-              <body>
-                <div id="app">
-                  <div id="thenavbar" class="navbar">
-                    <img id="icon"/>
-                    <ul>
-                      <li class="tabs">Blog</li>
-                      <li class="tabs">Blog</li>
-                      <li class="tabs">Blog</li>
-                    </ul>
-                  </div>
-                  <div id="hero-banner" class="hero">
-                    <img id="tassel-icon"/>
-                    <div id="tagline"></div>
-                    <div class="container is-fluid">
-                        <div class="notification">
-                          This container is <strong>Hero Section</strong>: it will have a 32px gap on either side, on any
-                          viewport size.
-                        </div>
-                      </div>
-                  </div>
-                  <div id="subscribe" class="section">
-                    <!-- <input type="text" placeholder="email@email.com"/> -->
-                    <button onclick=showOptinPopup() >Click</button>
-                    <div class="container is-fluid">
-                        <div class="notification">
-                          This container is <strong>Subscribe </strong>: it will have a 32px gap on either side, on any
-                          viewport size.
-                        </div>
-                      </div>
-                  </div>
-                  <div class="row2" class="section">
-                    <img id="img-background"/>
-                    <div id="copy2-onright"></div>
-                    <div class="container is-fluid">
-                        <div class="notification">
-                          This container is <strong>The Row 2</strong>: it will have a 32px gap on either side, on any
-                          viewport size.
-                        </div>
-                      </div>
-                  </div>
-                  <div class="row3" class="section">
-                    <img id="img-background"/>
-                    <div id="copy3-onleft"></div>
-                    <div class="container is-fluid">
-                        <div class="notification">
-                          This container is <strong>The Row 3</strong>: it will have a 32px gap on either side, on any
-                          viewport size.
-                        </div>
-                      </div>
-                  </div>
-                  <div id="footer" class="footer">
-                    <div id="subfooter-left">
-                      footer left
-                    </div>
-                    <div id="subfooter-mid">
-                      footer center 
-                    </div>
-                    <div id="subfooter-right">
-                      footer right
-                    </div>
-                  </div>
-                </div>
-                </body>
-        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-            <script type="text/javascript" src="app.js"></script>
-        <script type="text/javascript">
-                  console.log("hello VUE 3 from IIFE")
-        </script>
-    </body>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tassel VR</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+  <!-- Bulma Version 0.6.2-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css" integrity="sha256-2k1KVsNPRXxZOsXQ8aqcZ9GOOwmJTMoOB5o5Qp1d6/s=" crossorigin="anonymous" />
+  <!-- <link rel="stylesheet" type="text/css" href="../css/landing.css"> -->
+</head>
+<body>
+  <section class="hero is-info is-fullheight">
+    <div class="hero-head">
+      <nav class="navbar">
+        <div class="container">
+          <div class="navbar-brand">
+            <a class="navbar-item" href="../">
+              <!-- <img src="http://bulma.io/images/bulma-type-white.png" alt="Logo"> -->
+              TasselVR
+            </a>
+            <span class="navbar-burger burger" data-target="navbarMenu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </div>
+          <div id="navbarMenu" class="navbar-menu">
+              <div class="navbar-end">
+                           <span class="navbar-item">
+                <a class="button is-white is-outlined" href="#">
+                  <span class="icon">
+                    <i class="fa fa-home"></i>
+                  </span>
+                  <span>Prototype</span>
+                </a>
+              </span>
+                           <span class="navbar-item">
+                <a class="button is-white is-outlined" href="https://medium.com/tassel-vr">
+                  <span class="icon">
+                    <i class="fa fa-superpowers"></i>
+                  </span>
+                  <span>Blog</span>
+                </a>
+              </span>
+              <span class="navbar-item">
+                <a class="button is-white is-outlined" href="#">
+                  <span class="icon">
+                    <i class="fa fa-book"></i>
+                  </span>
+                  <span>Whitepaper</span>
+                </a>
+              </span>
+              <span class="navbar-item">
+                <a class="button is-white is-outlined" href="https://github.com/ctalladen78/tasselhoff">
+                  <span class="icon">
+                    <i class="fa fa-github"></i>
+                  </span>
+                  <span>Code Repository</span>
+                </a>
+              </span>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <div class="column is-6 is-offset-3">
+          <h1 class="title">
+            Coming Soon
+          </h1>
+          <h2 class="subtitle">
+              TasselVR is a peer-to-peer decentralized marketplace for tourist activities based on virtual reality and blockchain technology.
+          </h2>
+          <div class="box">
+            
+            <div class="field is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" placeholder="Enter your email">
+              </p>
+              <p class="control">
+                <a class="button is-info">
+                  Notify Me
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <!-- <script async type="text/javascript" src="../js/bulma.js"></script> -->
+</body>
 </html>

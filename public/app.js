@@ -1,6 +1,7 @@
 
+// https://vuejs-tips.github.io/cheatsheet/
 (function(Vue){
-    new Vue({
+    let vm = new Vue({
         el: 'app',
         // mounted: function(){}
         created: function(){
@@ -10,8 +11,6 @@
             msg: "initial message"
         }
 
-
     })
-    var i = vm.$isServer()
-    console.log(i)
+    console.log("vm.$isServer ?", vm.$isServer)
 })(Vue)
