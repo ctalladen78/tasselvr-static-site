@@ -24,6 +24,6 @@ func main() {
 	// testing rest framework
 	log.Println(sendGridApiKey) 
 	// send mail
-	//emailHandler()
+	emailHandler()  // https://cloud.google.com/appengine/docs/standard/go/issue-requests
 	appengine.Main()
 }
