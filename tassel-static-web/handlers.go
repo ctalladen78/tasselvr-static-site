@@ -4,7 +4,11 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"github.com/sendgrid/sendgrid-go"
+	//"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 // turn this into json
@@ -21,4 +25,18 @@ const jsonRes = `<!doctype html>
 
 func jsonHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, jsonRes)
+}
+
+func emailHandler(){
+	request := sendgrid.GetRequest(os.Getenv("SENDGRID_API_KEY"), "/v3/api_keys", "https://api.sendgrid.com")
+	request.Method = "GET"
+
+	response, err := sendgrid.API(request)
+	if err != nil {
+		log.Println("error", err)
+	} else {
+		fmt.Println(response.StatusCode)
+		fmt.Println(response.Body)
+		fmt.Println(response.Headers)
+	}
 }

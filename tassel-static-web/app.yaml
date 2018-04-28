@@ -30,3 +30,6 @@ handlers:
 # finally, we route all other requests to our application. The script name just means "the go app"
 - url: /.*
   script: _go_app
+  
+env_variables:
+  SENDGRID_API_KEY: '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'
