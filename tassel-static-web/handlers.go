@@ -39,6 +39,7 @@ type Animal struct {
 // }
 
 // https://blog.golang.org/json-and-go
+//https://golang.org/src/encoding/json/example_test.go
 func jsonHandler(w http.ResponseWriter, r *http.Request) {
 	var jsonBlob = []byte(`{[
 		{"Name": "Platypus", "Order": "Monotremata"},
@@ -54,6 +55,16 @@ func jsonHandler(w http.ResponseWriter, r *http.Request) {
 	log.Fatal("json example: ", animals)
 	// Output:
 	// [{Name:Platypus Order:Monotremata} {Name:Quoll Order:Dasyuromorphia}]
+}
+
+func jsonHandler1(w http.ResponseWriter, r *http.Request) {
+
+	const jsonStream = `
+	{"Message": "Hello", "Array": [1, 2, 3], "Null": null, "Number": 1.234}
+`
+	dec := json.NewDecoder(strings.NewReader(jsonStream))
+	log.Fatal("json example", dec)
+
 }
 
 // echoHandler reads a JSON object from the body, and writes it back out.
