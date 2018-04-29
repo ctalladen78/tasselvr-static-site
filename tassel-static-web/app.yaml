@@ -32,4 +32,5 @@ handlers:
   script: _go_app
   
 env_variables:
-  SENDGRID_API_KEY: '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'
+  # SENDGRID_API_KEY: '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'
+  SENDGRID_API_KEY: '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'

@@ -3,73 +3,116 @@ package main
 // handler functions
 
 import (
+	"encoding/json"
 	"fmt"
-	"log"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
-	"io/ioutil"
-	//"github.com/sendgrid/sendgrid-go"
-	//"github.com/sendgrid/sendgrid-go/helpers/mail"
-	//"google.golang.org/appengine"
-    //    "google.golang.org/appengine/urlfetch" 
+
+	log "github.com/sirupsen/logrus"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/urlfetch"
 )
 
-// turn this into json
-const jsonRes = `<!doctype html>
-<html>
-<head>
-  <title>Static Files</title>
-  <link rel="stylesheet" type="text/css" href="main.css">
-</head>
-<body>
-  <p>This could be json.</p>
-</body>
-</html>`
-
-func jsonHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, jsonRes)
+// explicit typing
+type emailTemplate struct {
+	personalizations string
+	from             []string // map [string]interface{}
+	reply_to         []string
 }
 
-func emailHandler(){
-	/*
-	request := sendgrid.GetRequest(os.Getenv("SENDGRID_API_KEY"), "/v3/api_keys", "https://api.sendgrid.com")
-	request.Method = "GET"
+// dynamic typing using empty interface
+const jsonExample = `{ 'personalizations': 
+	[ { 'to': [ { email: 'john.doe@example.com', 'name': 'John Doe' } ],
+		'subject': 'Hello, World!' } ],
+   'from': { 'email': 'sam.smith@example.com', 'name': 'Sam Smith' },
+   'reply_to': { 'email': 'sam.smith@example.com', 'name': 'Sam Smith' } }`
 
-	response, err := sendgrid.API(request) // instead of using sendgrid use the appengine urlfetch
-	
-	
-	 // ctx := appengine.NewContext(r)
-     //   client := urlfetch.Client(ctx)
-      //  resp, err := client.Get("https://www.google.com/")
-	 
+type Animal struct {
+	Name  string
+	Order string
+}
+
+// type Animals struct {
+// 	[Animal]interface{}
+// }
+
+// https://blog.golang.org/json-and-go
+func jsonHandler(w http.ResponseWriter, r *http.Request) {
+	var jsonBlob = []byte(`{[
+		{"Name": "Platypus", "Order": "Monotremata"},
+		{"Name": "Quoll",    "Order": "Dasyuromorphia"}
+	]}`)
+	var animals []Animal
+
+	err := json.Unmarshal(jsonBlob, &animals)
 	if err != nil {
-		log.Println("error", err)
-	} else {
-		fmt.Println(response.StatusCode)
-		fmt.Println(response.Body)
-		fmt.Println(response.Headers)
+		fmt.Println("error:", err)
 	}
-	*/
+	fmt.Printf("%+v", animals)
+	log.Fatal("json example: ", animals)
+	// Output:
+	// [{Name:Platypus Order:Monotremata} {Name:Quoll Order:Dasyuromorphia}]
+}
+
+// echoHandler reads a JSON object from the body, and writes it back out.
+// https://gist.github.com/campoy/7b44f6ec2d9e82d956d34b4989b33192
+func echoHandler(w http.ResponseWriter, r *http.Request) {
+	var msg interface{}
+	if err := json.NewDecoder(r.Body).Decode(&msg); err != nil {
+		if _, ok := err.(*json.SyntaxError); ok {
+			// log.Fatal(w, http.StatusBadRequest, "Body was not valid JSON: %v", err)
+			log.Fatal("Body was not valid JSON: %v", err)
+			return
+		}
+		// log.Fatal(w, http.StatusInternalServerError, "Could not get body: %v", err)
+		log.Fatal("Could not get body: %v", err)
+		return
+	}
+
+	b, err := json.Marshal(msg)
+	if err != nil {
+		// log.Fatal(w, http.StatusInternalServerError, "Could not marshal JSON: %v", err)
+		log.Fatal("Could not marshal JSON: %v", err)
+		return
+	}
+	w.Write(b)
+}
+
+func emailHandler(w http.ResponseWriter, r *http.Request) {
 	url := "https://api.sendgrid.com/v3/mail/send"
 
-	payload := strings.NewReader("{\"personalizations\":[{\"to\":[{\"email\":\"john.doe@example.com\",\"name\":\"John Doe\"}],\"subject\":\"Hello, World!\"}],\"from\":{\"email\":\"sam.smith@example.com\",\"name\":\"Sam Smith\"},\"reply_to\":{\"email\":\"sam.smith@example.com\",\"name\":\"Sam Smith\"}}")
+	// must be in JSON
+	payload := strings.NewReader("{\"personalizations\":[{\"to\":[{\"email\":\"cyrus@tasselvr.com\",\"name\":\"John Doe\"}],\"subject\":\"Hello, World!\"}],\"from\":{\"email\":\"sam.smith@example.com\",\"name\":\"Sam Smith\"},\"reply_to\":{\"email\":\"sam.smith@example.com\",\"name\":\"Sam Smith\"}}")
 
 	req, _ := http.NewRequest("POST", url, payload)
-	
-
-	
 	auth := "Bearer " + os.Getenv("SENDGRID_API_KEY")
-	
 	log.Println("auth ", auth)
 	req.Header.Add("authorization", auth)
 	req.Header.Add("content-type", "application/json")
 
-	res, _ := http.DefaultClient.Do(req)
-
+	// res, _ := http.DefaultClient.Do(req)
 	// defer res.Body.Close()
-	body, _ := ioutil.ReadAll(res.Body)
+	// body, _ := ioutil.ReadAll(res.Body)
 
-	fmt.Println(res)
+	// log.Println("request: ", r)
+	ctx := appengine.NewContext(r)
+	// ctx := r.Context()
+	client := urlfetch.Client(ctx)
+
+	resp, err := client.Get(url)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	body, _ := ioutil.ReadAll(resp.Body)
+	// TODO the post request to sendgrid is returning a 405 response due to malformed json payload
+
+	fmt.Fprint(w, "SendGrid response: ", resp.Status)
+
+	fmt.Println(resp)
 	fmt.Println(string(body))
+	defer resp.Body.Close()
 }

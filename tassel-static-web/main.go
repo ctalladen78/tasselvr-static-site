@@ -3,27 +3,28 @@ package main
 // main function
 import (
 	"net/http"
-	"log"
-	"os"
 	// jsoniter
 	// fasthttp
 	"google.golang.org/appengine"
+
+	log "github.com/sirupsen/logrus"
 	//"github.com/ant0ine/go-json-rest/rest" // rest server
 	//"github.com/sendgrid/rest" // rest client
-	
 )
 
 func main() {
-	sendGridApiKey := os.Getenv("SENDGRID_API_KEY")
+	log.SetFormatter(&log.JSONFormatter{})
+
 	// Serve static files from "static" directory.
 	http.Handle("/", http.FileServer(http.Dir("public")))
 	//http.Handle("/public/", http.FileServer(http.Dir(".")))
 
-	http.HandleFunc("/json", jsonHandler) 
-	
-	// testing rest framework
-	log.Println(sendGridApiKey) 
+	// get json
+	http.HandleFunc("/json", echoHandler) // https://cloud.google.com/appengine/docs/standard/go/issue-requests
 	// send mail
-	emailHandler()  // https://cloud.google.com/appengine/docs/standard/go/issue-requests
+	http.HandleFunc("/email", emailHandler) // https://cloud.google.com/appengine/docs/standard/go/issue-requests
+
+	// testing rest framework
+
 	appengine.Main()
 }
