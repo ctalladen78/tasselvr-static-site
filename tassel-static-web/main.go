@@ -7,6 +7,8 @@ import (
 	// fasthttp
 	"google.golang.org/appengine"
 
+	handlers "hello2/tassel-static-web/handlers"
+
 	log "github.com/sirupsen/logrus"
 	//"github.com/ant0ine/go-json-rest/rest" // rest server
 	//"github.com/sendgrid/rest" // rest client
@@ -20,9 +22,10 @@ func main() {
 	//http.Handle("/public/", http.FileServer(http.Dir(".")))
 
 	// get json
-	http.HandleFunc("/json", echoHandler) // https://cloud.google.com/appengine/docs/standard/go/issue-requests
+	// http.HandleFunc("/json", jsonStreamHandler) // https://cloud.google.com/appengine/docs/standard/go/issue-requests
+	http.HandleFunc("/json", handlers.EchoHandler)
 	// send mail
-	http.HandleFunc("/email", emailHandler) // https://cloud.google.com/appengine/docs/standard/go/issue-requests
+	http.HandleFunc("/email", handlers.EmailHandler) // https://cloud.google.com/appengine/docs/standard/go/issue-requests
 
 	// testing rest framework
 

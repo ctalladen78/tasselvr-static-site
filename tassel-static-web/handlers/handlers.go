@@ -1,4 +1,4 @@
-package main
+package handlers 
 
 // handler functions
 
@@ -34,67 +34,103 @@ type Animal struct {
 	Order string
 }
 
-// type Animals struct {
-// 	[Animal]interface{}
-// }
+type Animals struct {
+	Animal []Animal `json:"animal"`
+}
 
 // https://blog.golang.org/json-and-go
 //https://golang.org/src/encoding/json/example_test.go
-func jsonHandler(w http.ResponseWriter, r *http.Request) {
-	var jsonBlob = []byte(`{[
-		{"Name": "Platypus", "Order": "Monotremata"},
-		{"Name": "Quoll",    "Order": "Dasyuromorphia"}
-	]}`)
-	var animals []Animal
-
-	err := json.Unmarshal(jsonBlob, &animals)
+func JsonHandler(w http.ResponseWriter, r *http.Request) {
+	type ColorGroup struct {
+		id     int      `json: id`
+		Name   string   `json: name`
+		Colors []string `json: colors`
+	}
+	group := ColorGroup{
+		id:     1,
+		Name:   "Reds",
+		Colors: []string{"Crimson", "Red", "Ruby", "Maroon"},
+	}
+	var group1 ColorGroup
+	marshaled, err := json.Marshal(group)
 	if err != nil {
 		fmt.Println("error:", err)
 	}
-	fmt.Printf("%+v", animals)
-	log.Fatal("json example: ", animals)
+	unmarshaled := json.Unmarshal(marshaled, &group1)
+
+	os.Stdout.Write(marshaled)
+	log.Print("unmarshalled ", unmarshaled)
+	log.Print("marshalled ", string(marshaled))
 	// Output:
-	// [{Name:Platypus Order:Monotremata} {Name:Quoll Order:Dasyuromorphia}]
+	// {"ID":1,"Name":"Reds","Colors":["Crimson","Red","Ruby","Maroon"]}
 }
 
-func jsonHandler1(w http.ResponseWriter, r *http.Request) {
+// boilerplate
+// using json.NewDecoder & strings.NewReader
+// https://attilaolah.eu/2013/11/29/json-decoding-in-go/
+func jsonStreamHandler(w http.ResponseWriter, r *http.Request) {
+	var msg interface{}
 
-	const jsonStream = `
-	{"Message": "Hello", "Array": [1, 2, 3], "Null": null, "Number": 1.234}
-`
-	dec := json.NewDecoder(strings.NewReader(jsonStream))
-	log.Fatal("json example", dec)
+	const jsonStream = `{"Message": "Hello", "Array": [1, 2, 3]}`
+	dec := json.NewDecoder(strings.NewReader(jsonStream)) // TODO do not use this on large datasets
+	// log.Println("json example", dec)
+
+	if err := dec.Decode(&msg); err != nil {
+		return
+	}
+	b, err := json.Marshal(msg)
+	if err != nil {
+		return
+	}
+	w.Write(b)
 
 }
 
 // echoHandler reads a JSON object from the body, and writes it back out.
 // https://gist.github.com/campoy/7b44f6ec2d9e82d956d34b4989b33192
-func echoHandler(w http.ResponseWriter, r *http.Request) {
+func EchoHandler(w http.ResponseWriter, r *http.Request) {
 	var msg interface{}
 	if err := json.NewDecoder(r.Body).Decode(&msg); err != nil {
 		if _, ok := err.(*json.SyntaxError); ok {
-			// log.Fatal(w, http.StatusBadRequest, "Body was not valid JSON: %v", err)
-			log.Fatal("Body was not valid JSON: %v", err)
+			log.Fatal(w, http.StatusBadRequest, "Body was not valid JSON: %v", err)
 			return
 		}
-		// log.Fatal(w, http.StatusInternalServerError, "Could not get body: %v", err)
-		log.Fatal("Could not get body: %v", err)
+		log.Fatal(w, http.StatusInternalServerError, "Could not get body: %v", err)
 		return
 	}
 
 	b, err := json.Marshal(msg)
 	if err != nil {
-		// log.Fatal(w, http.StatusInternalServerError, "Could not marshal JSON: %v", err)
-		log.Fatal("Could not marshal JSON: %v", err)
+		log.Fatal(w, http.StatusInternalServerError, "Could not marshal JSON: %v", err)
 		return
 	}
+	log.Println("json response: ", string(b))
 	w.Write(b)
 }
 
-func emailHandler(w http.ResponseWriter, r *http.Request) {
+// errorf writes a swagger-compliant error response.
+func errorHandler(w http.ResponseWriter, code int, format string, a ...interface{}) {
+	var out struct {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	}
+
+	out.Code = code
+	out.Message = fmt.Sprintf(format, a...)
+
+	b, err := json.Marshal(out)
+	if err != nil {
+		http.Error(w, `{"code": 500, "message": "Could not format JSON for original message."}`, 500)
+		return
+	}
+
+	http.Error(w, string(b), code)
+}
+
+func EmailHandler(w http.ResponseWriter, r *http.Request) {
 	url := "https://api.sendgrid.com/v3/mail/send"
 
-	// must be in JSON
+	// TODO how does strings.NewReader parse strings into json
 	payload := strings.NewReader("{\"personalizations\":[{\"to\":[{\"email\":\"cyrus@tasselvr.com\",\"name\":\"John Doe\"}],\"subject\":\"Hello, World!\"}],\"from\":{\"email\":\"sam.smith@example.com\",\"name\":\"Sam Smith\"},\"reply_to\":{\"email\":\"sam.smith@example.com\",\"name\":\"Sam Smith\"}}")
 
 	req, _ := http.NewRequest("POST", url, payload)
