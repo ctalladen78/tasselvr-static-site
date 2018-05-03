@@ -2,7 +2,7 @@
 // https://vuejs-tips.github.io/cheatsheet/
 (function(Vue){
     let vm = new Vue({
-        el: 'app',
+        el: '#app',
         // mounted: function(){}
         created: function(){
             console.log("hello VUE 2")

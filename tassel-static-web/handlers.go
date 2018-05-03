@@ -1,7 +1,7 @@
 package handlers
 
 // handler functions
-
+/*
 import (
 	"encoding/json"
 	"fmt"
@@ -23,7 +23,7 @@ type emailTemplate struct {
 }
 
 // dynamic typing using empty interface
-const jsonExample = `{ 'personalizations': 
+const jsonExample = `{ 'personalizations':
 	[ { 'to': [ { email: 'john.doe@example.com', 'name': 'John Doe' } ],
 		'subject': 'Hello, World!' } ],
    'from': { 'email': 'sam.smith@example.com', 'name': 'Sam Smith' },
@@ -163,3 +163,4 @@ func EmailHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(string(body))
 	defer resp.Body.Close()
 }
+*/

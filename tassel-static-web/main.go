@@ -5,8 +5,9 @@ import (
 
 	// jsoniter // json parser/decoder/encoder
 	// fasthttp
+	"net/http"
+
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 	"google.golang.org/appengine"
 
 	log "github.com/sirupsen/logrus"
@@ -16,7 +17,7 @@ import (
 
 func main() {
 	e := echo.New()
-	e.Use(middleware.Logger())
+	// e.Use(middleware.Logger())
 	e.Static("/", "public")
 	log.SetFormatter(&log.JSONFormatter{})
 
@@ -31,6 +32,8 @@ func main() {
 	// http.HandleFunc("/email", handlers.EmailHandler) // https://cloud.google.com/appengine/docs/standard/go/issue-requests
 
 	// testing rest framework
+	// e := echo.New(":8080")
+	http.Handle("/", e)
 
 	appengine.Main()
 }

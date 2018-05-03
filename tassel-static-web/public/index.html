@@ -11,6 +11,7 @@
   <!-- Bulma Version 0.6.2-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css" integrity="sha256-2k1KVsNPRXxZOsXQ8aqcZ9GOOwmJTMoOB5o5Qp1d6/s=" crossorigin="anonymous" />
   <!-- <link rel="stylesheet" type="text/css" href="../css/landing.css"> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 </head>
 <body>
   <section class="hero is-info is-fullheight">
@@ -67,7 +68,7 @@
       </nav>
     </div>
 
-    <div class="hero-body">
+    <div class="hero-body" id="app">
       <div class="container has-text-centered">
         <div class="column is-6 is-offset-3">
           <h1 class="title">
@@ -93,7 +94,6 @@
     <input type="submit" value="Sign Up" data-drip-attribute="sign-up-button" />
   </div>
 </form>
-
                  -->
               </p>
               <p class="control">
@@ -106,8 +106,10 @@
         </div>
       </div>
     </div>
+    <!-- end hero -->
 
   </section>
   <!-- <script async type="text/javascript" src="../js/bulma.js"></script> -->
+  <script type="text/javascript" src="app.js"></script>
 </body>
 </html>
