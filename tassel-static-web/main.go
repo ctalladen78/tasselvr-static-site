@@ -11,8 +11,6 @@ import (
 	"google.golang.org/appengine"
 
 	log "github.com/sirupsen/logrus"
-	//"github.com/ant0ine/go-json-rest/rest" // rest server
-	//"github.com/sendgrid/rest" // rest client
 )
 
 func main() {
