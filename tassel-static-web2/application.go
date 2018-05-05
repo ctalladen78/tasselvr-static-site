@@ -21,6 +21,6 @@ func main(){
 	
 	})
 
-	e.Logrus.Fatal(e.Start(":5000"))
+	e.logrus.Fatal(e.Start(":5000"))
 
 }
